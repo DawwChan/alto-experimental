@@ -7,10 +7,15 @@
  */
 package org.opendaylight.alto.ext.impl.help;
 
+import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ReadDataFailedException extends Exception{
+    private static final Logger LOG = LoggerFactory.getLogger(ReadDataFailedException.class);
     private static final long serialVersionUID = 1L;
 
     public void printMessage(String message) {
-        System.out.println(message);
+        LOG.error(message);
     }
 }

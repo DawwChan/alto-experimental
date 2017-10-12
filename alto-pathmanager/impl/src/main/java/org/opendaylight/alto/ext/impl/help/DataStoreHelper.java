@@ -15,8 +15,16 @@ import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DataStoreHelper {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DataStoreHelper.class);
+
+    private DataStoreHelper(){
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * @param dataBroker
@@ -27,14 +35,13 @@ public class DataStoreHelper {
      */
     public static <T extends DataObject> T readOperational(
             DataBroker dataBroker, InstanceIdentifier<T> iid) throws ReadDataFailedException {
-        T data = readFromDataStore(dataBroker, iid, LogicalDatastoreType.OPERATIONAL);
-        return data;
+        return readFromDataStore(dataBroker, iid, LogicalDatastoreType.OPERATIONAL);
     }
 
     public static <T extends DataObject> T readFromDataStore(
             DataBroker dataBroker, InstanceIdentifier<T> iid, LogicalDatastoreType type) throws ReadDataFailedException {
-        ReadOnlyTransaction tx = dataBroker.newReadOnlyTransaction();
-        Future<Optional<T>> future = tx.read(type, iid);
+        ReadOnlyTransaction rx = dataBroker.newReadOnlyTransaction();
+        Future<Optional<T>> future = rx.read(type, iid);
         try {
             if (future != null) {
                 Optional<T> optional = future.get();
@@ -43,9 +50,9 @@ public class DataStoreHelper {
                 }
             }
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            LOG.error("Data read is interrupted: {}", e);
         } finally {
-            tx.close();
+            rx.close();
         }
         throw new ReadDataFailedException();
     }

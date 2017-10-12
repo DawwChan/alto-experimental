@@ -7,6 +7,7 @@
  */
 package org.opendaylight.alto.ext.impl;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,6 +24,7 @@ import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification.ModificationType;
 import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
 import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
+import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Prefix;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Uri;
@@ -66,6 +68,10 @@ public class PathListenerTest {
 
   @Before
   public void before() throws Exception {
+    ReadOnlyTransaction rx = mock(ReadOnlyTransaction.class);
+    when(rx.read(any(LogicalDatastoreType.class), any(InstanceIdentifier.class)))
+        .thenReturn(null);
+    when(dataBroker.newReadOnlyTransaction()).thenReturn(rx);
     pathListener = new PathListener(dataBroker);
   }
 

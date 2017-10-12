@@ -13,8 +13,8 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yang.gen.v1.urn.opendaylight.action.types.rev131112.action.action.OutputActionCase;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.action.types.rev131112.action.list.Action;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.ext.pathmanager.rev150105.Protocol;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.ext.pathmanager.rev150105.path.FlowDesc;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.ext.pathmanager.rev150105.path.FlowDescBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.ext.pathmanager.rev150105.path.manager.path.FlowDesc;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.ext.pathmanager.rev150105.path.manager.path.FlowDescBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.types.rev131026.Flow;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.types.rev131026.flow.Instructions;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.types.rev131026.flow.Match;
@@ -31,6 +31,10 @@ import org.slf4j.LoggerFactory;
 public class PathManagerHelper {
 
   private static final Logger LOG = LoggerFactory.getLogger(PathManagerHelper.class);
+
+  private PathManagerHelper() {
+    throw new IllegalStateException("Utility class");
+  }
 
   public static FlowDesc toAltoFlowDesc(Match match) {
     FlowDescBuilder builder = new FlowDescBuilder();
