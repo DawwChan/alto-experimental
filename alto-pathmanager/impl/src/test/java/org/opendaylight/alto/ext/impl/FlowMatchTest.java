@@ -6,37 +6,23 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 package org.opendaylight.alto.ext.impl;
-import org.junit.Before;
 import org.opendaylight.alto.ext.helper.PathManagerHelper;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Prefix;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.PortNumber;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.ext.pathmanager.rev150105.Protocol;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.ext.pathmanager.rev150105.path.FlowDesc;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.ext.pathmanager.rev150105.path.FlowDescBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.types.rev131026.Flow;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.types.rev131026.flow.Instructions;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.types.rev131026.flow.Match;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.MacAddress;
 import org.junit.Assert;
 import org.junit.Test;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.types.rev131026.flow.Match;
 
 public class FlowMatchTest {
-
-//    FlowDesc  flow1_test, flow2_rule, flow2_test, flow3_rule, flow3_test, flow4_rule, flow4_test;
-
-    //String srcIp, dstIp, srcPort, dstPort, protocol, srcMac, dstMac
-//    @Before
-//    public void BuildTestCases() {
-//
-//    }
-
     public static FlowDesc toAltoFlowDescTest(String srcIp, String dstIp,int srcPort, int dstPort, int protocol, String srcMac, String dstMac) {
         FlowDescBuilder builder = new FlowDescBuilder();
         Ipv4Prefix ipv4SrcPrefix = null;
         Ipv4Prefix ipv4DstPrefix =null;
 
-        if(srcIp !=null && srcIp != "") {
+        if(srcIp != null && srcIp != "") {
             ipv4SrcPrefix = new Ipv4Prefix(srcIp);
             builder.setSrcIp(ipv4SrcPrefix);
         }
@@ -45,7 +31,7 @@ public class FlowMatchTest {
             ipv4DstPrefix = new Ipv4Prefix(dstIp);
             builder.setDstIp(ipv4DstPrefix);
         }
-        if(srcMac !=null && srcMac != "") {
+        if(srcMac != null && srcMac != "") {
             MacAddress srcMacAddress = new MacAddress(srcMac);
             builder.setSrcMac(srcMacAddress);
         }
@@ -54,16 +40,16 @@ public class FlowMatchTest {
             builder.setDstMac(dstMacAddress);
         }
 
-        if(protocol >=0&&protocol<=2) {
-            if(protocol ==0)
+        if(protocol >= 0 && protocol <= 2) {
+            if(protocol == 0)
                 builder.setProtocol(Protocol.Tcp);
-            else if(protocol==1)
+            else if(protocol == 1)
                 builder.setProtocol(Protocol.Udp);
-            else if(protocol==2)
+            else if(protocol == 2)
                 builder.setProtocol(Protocol.Sctp);
-            if(srcPort>=0&&srcPort<=65535)
+            if(srcPort >=0 && srcPort <= 65535)
                 builder.setSrcPort(new PortNumber(srcPort));
-            if(dstPort>=0&&dstPort<=65535)
+            if(dstPort >=0 && dstPort <= 65535)
                 builder.setDstPort(new PortNumber(dstPort));
 
         }

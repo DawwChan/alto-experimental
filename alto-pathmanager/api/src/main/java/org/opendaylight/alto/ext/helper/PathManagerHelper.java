@@ -40,10 +40,10 @@ public class PathManagerHelper {
   public static FlowDesc toAltoFlowDesc(Match match) {
     FlowDescBuilder builder = new FlowDescBuilder();
     if (match != null) {
-      if(match.getEthernetMatch()!=null) {
-        if(match.getEthernetMatch().getEthernetSource()!=null)
+      if (match.getEthernetMatch() != null) {
+        if (match.getEthernetMatch().getEthernetSource() != null)
           builder.setSrcMac(match.getEthernetMatch().getEthernetSource().getAddress());
-        if(match.getEthernetMatch().getEthernetDestination()!=null)
+        if (match.getEthernetMatch().getEthernetDestination() != null)
           builder.setDstMac(match.getEthernetMatch().getEthernetDestination().getAddress());
       }
 
@@ -130,7 +130,7 @@ public class PathManagerHelper {
 
 
   public static boolean isFlowMatch(FlowDesc rule, FlowDesc test) {
-    return (rule==null) ||
+    return (rule == null) ||
             ((iPv4PrefixMatch(rule.getSrcIp(),test.getSrcIp()))
                     && (iPv4PrefixMatch(rule.getDstIp(),test.getDstIp()))
                     && (protocolMatch(rule.getProtocol(),test.getProtocol()))
@@ -142,30 +142,37 @@ public class PathManagerHelper {
 
   }
   private static boolean iPv4PrefixMatch(Ipv4Prefix rule, Ipv4Prefix test) {
-    if(rule ==null)
+    int ruleIPv4Address, ruleIPv4Mask, testIPv4Address, testIPv4Mask;
+    if(rule == null)
       return true;
     try {
-      int ruleIPv4Address = IPPrefixHelper.iPv4PrefixToIntIPv4Address(rule);
-      int ruleIPv4Mask = IPPrefixHelper.ipv4PrefixToIntIPv4Mask(rule);
-      int testIPv4Address = IPPrefixHelper.iPv4PrefixToIntIPv4Address(test);
-      int testIPv4Mask = IPPrefixHelper.ipv4PrefixToIntIPv4Mask(test);
-      if(ruleIPv4Mask <= testIPv4Mask) {
-        if((testIPv4Address & ruleIPv4Mask)== (ruleIPv4Address & ruleIPv4Mask))
-          return true;
-        return false;
-      }
+      ruleIPv4Address = IPPrefixHelper.iPv4PrefixToIntIPv4Address(rule);
+      ruleIPv4Mask = IPPrefixHelper.ipv4PrefixToIntIPv4Mask(rule);
+
+    } catch (UnknownHostException e) {
+      LOG.error("Unknown Host" + rule.getValue(),e);
       return false;
-    } catch (UnknownHostException e ) {
-      e.printStackTrace();
+    }
+    try {
+      testIPv4Address = IPPrefixHelper.iPv4PrefixToIntIPv4Address(test);
+      testIPv4Mask = IPPrefixHelper.ipv4PrefixToIntIPv4Mask(test);
+    } catch (UnknownHostException e) {
+      LOG.error("Unknown Host" + test.getValue(), e);
+      return false;
+    }
+    if(ruleIPv4Mask <= testIPv4Mask) {
+      if((testIPv4Address & ruleIPv4Mask) == (ruleIPv4Address & ruleIPv4Mask))
+        return true;
+      return false;
     }
     return false;
   }
   private static boolean portNumberMatch(PortNumber rule, PortNumber test) {
-    return (rule==null) ||
+    return (rule == null) ||
             (rule.equals(test));
   }
   private static boolean macAddressMatch(MacAddress rule, MacAddress test) {
-    return (rule==null) ||
+    return (rule == null) ||
             (rule.equals(test));
   }
   private static boolean protocolMatch(Protocol rule, Protocol test) {
